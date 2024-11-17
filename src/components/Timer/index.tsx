@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import DefaultButton from "../DefaultButton";
+import styled from "styled-components";
 
 const Timer = () => {
   const [hours, setHours] = useState(0);
@@ -48,16 +50,40 @@ const Timer = () => {
   };
 
   return (
-    <div>
-      <div>
+    <TimerContainer>
+      <StyledH1>
         {String(hours).padStart(2, "0")}:{String(minutes).padStart(2, "0")}:
         {String(seconds).padStart(2, "0")}
-      </div>
-      <button onClick={startTimer}>Start</button>
-      <button onClick={stopTimer}>Stop</button>
-      <button onClick={resetTimer}>Reset</button>
-    </div>
+      </StyledH1>
+      <ButtonsContainer>
+        <DefaultButton color="warning" onClick={startTimer}>
+          Start
+        </DefaultButton>
+        <DefaultButton onClick={stopTimer}>Stop</DefaultButton>
+        <DefaultButton onClick={resetTimer}>Reset</DefaultButton>
+      </ButtonsContainer>
+    </TimerContainer>
   );
 };
+
+const StyledH1 = styled.h1`
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: white;
+`;
+
+const TimerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 32px;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 16px;
+`;
 
 export default Timer;
