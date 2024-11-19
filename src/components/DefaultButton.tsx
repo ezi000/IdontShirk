@@ -6,14 +6,18 @@ const DefaultButton = ({
   className,
   bgColor = "black",
   textColor = "#fff",
+  startIcon,
   ...props
 }: DefaultButtonProps) => {
   return (
     <StyledButton
+      disableRipple
+      disableElevation
       variant="contained"
       className={className}
       $bgColor={bgColor}
       $textColor={textColor}
+      startIcon={startIcon}
       {...props}
     >
       {children}
@@ -35,6 +39,7 @@ const StyledButton = styled(Button)<{
 type DefaultButtonProps = ButtonProps & {
   bgColor?: string;
   textColor?: string;
+  startIcon?: React.ReactNode;
 };
 
 export default DefaultButton;

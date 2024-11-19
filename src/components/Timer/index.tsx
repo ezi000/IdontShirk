@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import DefaultButton from "../DefaultButton";
 import styled from "styled-components";
+import DefaultButton from "../DefaultButton";
 
 const Timer = () => {
+  const [isRunning, setIsRunning] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+
+  const isTimerAtZero = hours === 0 && minutes === 0 && seconds === 0;
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -40,8 +42,14 @@ const Timer = () => {
     };
   }, [isRunning]);
 
-  const startTimer = () => setIsRunning(true);
-  const stopTimer = () => setIsRunning(false);
+  const startTimer = () => {
+    setIsRunning(true);
+  };
+
+  const stopTimer = () => {
+    setIsRunning(false);
+  };
+
   const resetTimer = () => {
     setIsRunning(false);
     setHours(0);
@@ -56,11 +64,23 @@ const Timer = () => {
         {String(seconds).padStart(2, "0")}
       </StyledH1>
       <ButtonsContainer>
-        <DefaultButton color="warning" onClick={startTimer}>
-          Start
-        </DefaultButton>
-        <DefaultButton onClick={stopTimer}>Stop</DefaultButton>
-        <DefaultButton onClick={resetTimer}>Reset</DefaultButton>
+        <StyledButton
+          onClick={isRunning ? stopTimer : startTimer}
+          $pressed={isRunning}
+          bgColor={isRunning ? "red" : "green"}
+          textColor="white"
+        >
+          {isRunning ? "Stop" : "Start"}
+        </StyledButton>
+        <StyledButton
+          onClick={resetTimer}
+          bgColor="gray"
+          textColor="white"
+          $pressed={isTimerAtZero}
+          disabled={isTimerAtZero}
+        >
+          Reset
+        </StyledButton>
       </ButtonsContainer>
     </TimerContainer>
   );
@@ -83,7 +103,23 @@ const TimerContainer = styled.div`
 
 const ButtonsContainer = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 8px;
+  height: 40px;
+  align-items: flex-end;
+`;
+
+const StyledButton = styled(DefaultButton)<{
+  $pressed?: boolean;
+}>`
+  && {
+    font-family: "Merriweather", serif;
+    border-bottom: ${(p) =>
+      p.$pressed ? "2px solid transparent" : "2px solid #2c2c2c"};
+    height: ${(p) => (p.$pressed ? "30px" : "32px")};
+    width: 80px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+  }
 `;
 
 export default Timer;
