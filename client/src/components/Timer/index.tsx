@@ -67,7 +67,7 @@ const Timer = () => {
         <StyledButton
           onClick={isRunning ? stopTimer : startTimer}
           $pressed={isRunning}
-          bgColor={isRunning ? "red" : "green"}
+          bgColor={isRunning ? "#bc4749" : "#6a994e"}
           textColor="white"
         >
           {isRunning ? "Stop" : "Start"}
@@ -88,7 +88,7 @@ const Timer = () => {
 
 const StyledH1 = styled.h1`
   font-size: 48px;
-  margin-bottom: 16px;
+  margin: 0;
   color: white;
 `;
 
@@ -96,9 +96,10 @@ const TimerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
   width: 100%;
   margin-top: 32px;
+  text-align: center;
 `;
 
 const ButtonsContainer = styled.div`
@@ -112,7 +113,7 @@ const StyledButton = styled(DefaultButton)<{
   $pressed?: boolean;
 }>`
   && {
-    font-family: "Merriweather", serif;
+    font-family: "Geist Mono", monospace;
     border-bottom: ${(p) =>
       p.$pressed ? "2px solid transparent" : "2px solid #2c2c2c"};
     height: ${(p) => (p.$pressed ? "30px" : "32px")};

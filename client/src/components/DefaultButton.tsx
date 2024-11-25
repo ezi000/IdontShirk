@@ -32,7 +32,7 @@ const StyledButton = styled(Button)<{
   && {
     background-color: ${(props) => props.$bgColor};
     color: ${(props) => props.$textColor};
-    font-family: "Merriweather", serif;
+    font-family: "Geist Mono", monospace;
   }
 `;
 

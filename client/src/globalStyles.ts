@@ -8,12 +8,12 @@ const GlobalStyles = createGlobalStyle`
     height: 100%;
     font-size: 16px;
     line-height: 1.5;
-    background-color: #403d39;
+    background-color: #463f3a;
   }
   
   body, input {
     margin: 0;
-    font-family: 'Merriweather', serif;
+    font-family: "Geist Mono", monospace;
   }
 
   button {
@@ -28,6 +28,7 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
     min-width: 100%;
     min-height: 100%;
+    flex-direction: column;
 
     & > div:first-of-type {
       display: flex;

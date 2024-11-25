@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOutUser, setUser, setUserLoginToken } from "./authenticationSlice";
 import { useEffect } from "react";
 import selectUserLoginToken from "./selectUserLoginToken";
-import User from "./User";
-import { log } from "console";
+import { User } from "./User";
 
 const useLoginLogic = () => {
   const dispatch = useDispatch();
@@ -31,6 +30,10 @@ const useLoginLogic = () => {
         )
         .then((res: AxiosResponse<User>) => {
           dispatch(setUser(res.data));
+          axios.post("http://localhost:5050/user/add", {
+            user: res.data,
+            userToken: userToken,
+          });
         })
         .catch((err) => console.log(err));
     }

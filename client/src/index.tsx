@@ -6,6 +6,7 @@ import router from "./Router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import { store } from "./Redux/store";
+import Navbar from "./components/Navbar";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,6 +17,7 @@ root.render(
     <React.StrictMode>
       <Provider store={store}>
         <GlobalStyles />
+        <Navbar />
         <RouterProvider router={router} />
       </Provider>
     </React.StrictMode>
