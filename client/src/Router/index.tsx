@@ -4,13 +4,13 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import Home from "../containers/Home";
-import TaskTable from "../components/TaskTable";
+import TaskTablePage from "../containers/TaskTablePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Home />} />
-      <Route path="/tasks" element={<TaskTable />} />
+      <Route path="/tasks" element={<TaskTablePage />} />
     </>
   )
 );

@@ -16,7 +16,7 @@ const TaskTable = () => {
   return (
     <>
       <Draggable ref={setNodeRef} style={style} {...listeners} {...attributes}>
-        <DraggableContent>Drag me!</DraggableContent>
+        DragMe!
       </Draggable>
 
       <DropZoneWrapper>
@@ -28,11 +28,9 @@ const TaskTable = () => {
 
 const Draggable = styled.div`
   cursor: grab;
-`;
-const DraggableContent = styled.div`
-  border: 1px solid red;
   width: 80px;
   height: 80px;
+  border: 1px solid red;
 `;
 
 const DropZoneWrapper = styled.div`

@@ -9,7 +9,7 @@ const Home = () => {
   );
 };
 
-const BodyWrapper = styled.div`
+export const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
