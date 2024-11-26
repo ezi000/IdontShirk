@@ -5,14 +5,19 @@ import db from "../db/connection";
 const router = express.Router();
 const collection = db.collection("users");
 
-router.get("/", async (res: Response) => {
-  const results = await collection.find({}).toArray();
-  res.send(results).status(200);
+router.post("/me", async (req: Request<{ id: string }>, res: Response) => {
+  try {
+    const userFound = await collection.findOne({ id: req.body.id });
+    res.send(userFound).status(200);
+  } catch (error) {
+    res.send("User not found").status(500);
+  }
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const query = { _id: ObjectId.createFromTime(parseInt(req.params.id)) };
-  const results = await collection.findOne(query);
+  const results = await collection.findOne({
+    id: new ObjectId(req.params.id),
+  });
   if (!results) {
     res.send("Record not found").status(404);
     return;
@@ -23,7 +28,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/add", async (req: Request<RequestData>, res: Response) => {
   try {
     const newUser: UserRequest = {
-      _id: req.body.user.id,
+      id: req.body.user.id,
       email: req.body.user.email,
       verified_email: req.body.user.verified_email,
       name: req.body.user.name,
@@ -32,7 +37,7 @@ router.post("/add", async (req: Request<RequestData>, res: Response) => {
       picture: req.body.user.picture,
       loginToken: req.body.userToken,
     };
-    const userFound = await collection.findOne({ _id: newUser._id });
+    const userFound = await collection.findOne({ id: newUser.id });
     if (!userFound) {
       const results = await collection.insertOne(newUser);
       res.send(results).status(201);
@@ -43,7 +48,7 @@ router.post("/add", async (req: Request<RequestData>, res: Response) => {
 });
 
 type UserRequest = {
-  _id: ObjectId;
+  id: ObjectId;
   email: string;
   verified_email: boolean;
   name: string;

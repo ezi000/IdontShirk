@@ -1,18 +1,16 @@
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { logOutUser, setUser, setUserLoginToken } from "./authenticationSlice";
-import { useEffect } from "react";
-import selectUserLoginToken from "./selectUserLoginToken";
+import { useDispatch } from "react-redux";
+import { logOutUser, setUser } from "./authenticationSlice";
+import { useEffect, useState } from "react";
 import { User } from "./User";
 
 const useLoginLogic = () => {
   const dispatch = useDispatch();
-  const userToken = useSelector(selectUserLoginToken);
+  const [userToken, setUserToken] = useState<string>();
 
   const login = useGoogleLogin({
-    onSuccess: (codeResponse) =>
-      dispatch(setUserLoginToken(codeResponse.access_token)),
+    onSuccess: (codeResponse) => setUserToken(codeResponse.access_token),
     onError: (error) => console.log("Login Failed:", error),
   });
 
@@ -30,6 +28,7 @@ const useLoginLogic = () => {
         )
         .then((res: AxiosResponse<User>) => {
           dispatch(setUser(res.data));
+          localStorage.setItem("user", JSON.stringify(res.data.id));
           axios.post("http://localhost:5050/user/add", {
             user: res.data,
             userToken: userToken,
@@ -41,6 +40,7 @@ const useLoginLogic = () => {
 
   const logOut = () => {
     googleLogout();
+    localStorage.removeItem("user");
     dispatch(logOutUser());
   };
 

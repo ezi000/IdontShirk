@@ -1,12 +1,10 @@
-import { useSelector } from "react-redux";
 import DefaultButton from "../DefaultButton";
 import GoogleIcon from "../Icons/GoogleIcon";
-import selectUser from "./selectUser";
 import useLoginLogic from "./useLoginLogic";
+import { User } from "./User";
 
-const LoginButton = () => {
+const LoginButton = ({ user }: { user: User }) => {
   const { login, logOut } = useLoginLogic();
-  const user = useSelector(selectUser);
 
   return (
     <>

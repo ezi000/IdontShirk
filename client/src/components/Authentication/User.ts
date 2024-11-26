@@ -9,7 +9,7 @@ export type User = {
 };
 
 export type UserRequest = {
-  _id: string;
+  id: string;
   email: string;
   verified_email: boolean;
   name: string;
