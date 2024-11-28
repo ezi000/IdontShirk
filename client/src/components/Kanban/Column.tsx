@@ -9,24 +9,40 @@ const Column = ({ column, tasks }: ColumnProps) => {
   });
 
   return (
-    <StyledColumn>
-      <StyledH2 className="mb-4 font-semibold text-neutral-100">
-        {column.title}
-      </StyledH2>
-      <StyledTasks ref={setNodeRef}>
+    <StyledColumn ref={setNodeRef}>
+      <StyledH2>{column.title}</StyledH2>
+      <StyledTasks>
         {tasks.map((task) => {
           return <TaskCard key={task.id} task={task} />;
         })}
+        {tasks.length === 0 && <TaskPlaceholder>➕</TaskPlaceholder>}
       </StyledTasks>
     </StyledColumn>
   );
 };
+
+const TaskPlaceholder = styled.div`
+  color: #f5f5f5;
+  height: 80px;
+  background-color: #212529;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const StyledH2 = styled.h2`
   font-weight: 600;
   font-size: 1.5rem;
   color: #f5f5f5;
   margin-bottom: 1rem;
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #212529;
+  border-radius: 0.5rem;
+  height: 80px;
 `;
 
 const StyledTasks = styled.div`
@@ -42,7 +58,7 @@ const StyledColumn = styled.div`
   gap: 1rem;
   padding: 1rem;
   border-radius: 0.5rem;
-  background-color: #161a1d;
+  background-color: #343a40;
   height: 800px;
 `;
 

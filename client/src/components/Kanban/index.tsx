@@ -47,6 +47,7 @@ const Kanban = () => {
 
     const taskId = active.id as string;
     const newStatus = over.id as Task["status"];
+    console.log("newStatus", newStatus);
 
     setTasks(() =>
       tasks.map((task) =>
@@ -79,10 +80,9 @@ const Kanban = () => {
 
 const Body = styled.div`
   display: flex;
-  flex-direction: row !important;
   gap: 8px;
   padding: 32px;
-  align-items: flex-start !important;
+  width: 100%;
 `;
 
 export default Kanban;
