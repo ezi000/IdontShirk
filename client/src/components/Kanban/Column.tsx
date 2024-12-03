@@ -1,10 +1,10 @@
-import { useDroppable } from "@dnd-kit/core";
+import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import { Column as ColumnType, Task } from "./types";
 import TaskCard from "./TaskCard";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Column = ({ column, tasks }: ColumnProps) => {
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, active } = useDroppable({
     id: column.id,
   });
 
@@ -15,20 +15,22 @@ const Column = ({ column, tasks }: ColumnProps) => {
         {tasks.map((task) => {
           return <TaskCard key={task.id} task={task} />;
         })}
-        {tasks.length === 0 && <TaskPlaceholder>➕</TaskPlaceholder>}
       </StyledTasks>
+      <DroppableArea active={active ? true : false} />
     </StyledColumn>
   );
 };
 
-const TaskPlaceholder = styled.div`
-  color: #f5f5f5;
-  height: 80px;
-  background-color: #212529;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const DroppableArea = styled.div<{ active: boolean }>`
+  flex: 1;
+
+  ${({ active }) =>
+    active &&
+    css`
+      border: 2px dashed yellow;
+      background-color: #ffff001a;
+      border-radius: 16px;
+    `}
 `;
 
 const StyledH2 = styled.h2`

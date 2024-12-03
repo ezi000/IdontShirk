@@ -1,8 +1,14 @@
 import { useState } from "react";
 import type { Task, Column as ColumnType } from "./types";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+} from "@dnd-kit/core";
 import styled from "styled-components";
 import Column from "./Column";
+import TaskCard from "./TaskCard";
 
 const COLUMNS: ColumnType[] = [
   { id: "TODO", title: "To Do" },
@@ -39,8 +45,14 @@ const INITIAL_TASKS: Task[] = [
 
 const Kanban = () => {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+  const [activeId, setActiveId] = useState<string | number | null>(null);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id);
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveId(null);
     const { active, over } = event;
 
     if (!over) return;
@@ -49,7 +61,7 @@ const Kanban = () => {
     const newStatus = over.id as Task["status"];
     console.log("newStatus", newStatus);
 
-    setTasks(() =>
+    setTasks((tasks) =>
       tasks.map((task) =>
         task.id === taskId
           ? {
@@ -61,8 +73,12 @@ const Kanban = () => {
     );
   };
 
+  const getTaskById = (id: string | number) => {
+    return tasks.find((task) => task.id === id);
+  };
+
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <Body>
         {COLUMNS.map((column) => {
           return (
@@ -74,6 +90,10 @@ const Kanban = () => {
           );
         })}
       </Body>
+
+      <DragOverlay>
+        {activeId ? <TaskCard task={getTaskById(activeId) as Task} /> : null}
+      </DragOverlay>
     </DndContext>
   );
 };
