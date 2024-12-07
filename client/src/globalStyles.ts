@@ -11,7 +11,7 @@ const GlobalStyles = createGlobalStyle`
     background-color: #463f3a;
   }
   
-  body, input {
+  body, input, label, form {
     margin: 0;
     font-family: "Geist Mono", monospace;
   }
@@ -40,7 +40,6 @@ const GlobalStyles = createGlobalStyle`
 
   p,
   label {
-    font-family: 'Merriweather', serif;
     line-height: 1.5em;
   }
 

@@ -1,11 +1,13 @@
 import Kanban from "../../components/Kanban";
-import Modal from "../../components/Kanban/Modal";
+import AddTaskModal from "../../components/Kanban/AddTaskModal";
+import useGetTasks from "../../components/Kanban/useGetTasks";
 import { BodyWrapper } from "../Home";
 
 const KanbanPage = () => {
+  useGetTasks();
   return (
     <BodyWrapper>
-      <Modal />
+      <AddTaskModal />
       <Kanban />
     </BodyWrapper>
   );

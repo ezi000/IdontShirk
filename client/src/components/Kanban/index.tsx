@@ -9,6 +9,9 @@ import {
 import styled from "styled-components";
 import Column from "./Column";
 import TaskCard from "./TaskCard";
+import { useDispatch, useSelector } from "react-redux";
+import selectTasks from "./selectTasks";
+import { setTasks } from "./tasksSlice";
 
 const COLUMNS: ColumnType[] = [
   { id: "TODO", title: "To Do" },
@@ -16,35 +19,9 @@ const COLUMNS: ColumnType[] = [
   { id: "DONE", title: "Done" },
 ];
 
-const INITIAL_TASKS: Task[] = [
-  {
-    id: "1",
-    title: "Research Project",
-    description: "Gather requirements and create initial documentation",
-    status: "TODO",
-  },
-  {
-    id: "2",
-    title: "Design System",
-    description: "Create component library and design tokens",
-    status: "TODO",
-  },
-  {
-    id: "3",
-    title: "API Integration",
-    description: "Implement REST API endpoints",
-    status: "IN_PROGRESS",
-  },
-  {
-    id: "4",
-    title: "Testing",
-    description: "Write unit tests for core functionality",
-    status: "DONE",
-  },
-];
-
 const Kanban = () => {
-  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+  const tasks = useSelector(selectTasks);
+  const dispatch = useDispatch();
   const [activeId, setActiveId] = useState<string | number | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -59,18 +36,17 @@ const Kanban = () => {
 
     const taskId = active.id as string;
     const newStatus = over.id as Task["status"];
-    console.log("newStatus", newStatus);
 
-    setTasks((tasks) =>
-      tasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              status: newStatus,
-            }
-          : task
-      )
+    const newTasks = tasks.map((task) =>
+      task.id === taskId
+        ? {
+            ...task,
+            status: newStatus,
+          }
+        : task
     );
+
+    dispatch(setTasks(newTasks));
   };
 
   const getTaskById = (id: string | number) => {

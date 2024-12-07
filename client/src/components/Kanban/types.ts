@@ -5,6 +5,7 @@ export type Task = {
   status: TaskStatus;
   title: string;
   description: string;
+  assignee: string;
 };
 
 export type Column = {
