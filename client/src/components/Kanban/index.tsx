@@ -77,7 +77,7 @@ const Kanban = () => {
 const Body = styled.div`
   display: flex;
   gap: 8px;
-  padding: 32px;
+  padding: 0 32px 32px;
   width: 100%;
 `;
 

@@ -2,6 +2,8 @@ import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import { Column as ColumnType, Task } from "./types";
 import TaskCard from "./TaskCard";
 import styled, { css } from "styled-components";
+import TaskDetailsModal from "./TaskDetailsModal";
+import { useState } from "react";
 
 const Column = ({ column, tasks }: ColumnProps) => {
   const { setNodeRef, active } = useDroppable({
@@ -61,7 +63,7 @@ const StyledColumn = styled.div`
   padding: 1rem;
   border-radius: 0.5rem;
   background-color: #343a40;
-  height: 800px;
+  min-height: 600px;
 `;
 
 type ColumnProps = {

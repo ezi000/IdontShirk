@@ -26,9 +26,18 @@ const AddTaskModal = () => {
       assignee: "NONE",
     },
     onSubmit: async (task) => {
-      dispatch(addTask(task));
+      const taskId = Guid.raw();
+      dispatch(
+        addTask({
+          id: taskId,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          assignee: task.assignee,
+        })
+      );
       const response = await axios.post("http://localhost:5050/task/add", {
-        id: Guid.raw(),
+        id: taskId,
         title: task.title,
         description: task.description,
         status: task.status,
@@ -40,7 +49,9 @@ const AddTaskModal = () => {
 
   return (
     <>
-      <DefaultButton onClick={handleOpen}>Add new</DefaultButton>
+      <ButtonWrapper>
+        <DefaultButton onClick={handleOpen}>Add new</DefaultButton>
+      </ButtonWrapper>
       <MuiModal open={open} onClose={handleClose}>
         <Content>
           <h2>Add New Task</h2>
@@ -88,6 +99,13 @@ const AddTaskModal = () => {
     </>
   );
 };
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 24px 32px;
+`;
 
 const StyledForm = styled.form`
   display: flex;

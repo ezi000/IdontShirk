@@ -3,6 +3,7 @@ import LoginButton from "../Authentication/LoginButton";
 import useGetLoggedUser from "../Authentication/useGetLoggedUser";
 import { useSelector } from "react-redux";
 import selectUser from "../Authentication/selectUser";
+import LogoImageSrc from "../icons/Logo.png";
 
 const Navbar = () => {
   useGetLoggedUser();
@@ -11,7 +12,7 @@ const Navbar = () => {
   return (
     <NavbarContainer>
       <Logo href="/">
-        <LogoImage src="logo.png" alt="logo" />
+        <LogoImage src={LogoImageSrc} alt="logo" />
         IdontShirk
       </Logo>
       <NavLinks>
@@ -19,7 +20,7 @@ const Navbar = () => {
           <a href="/">Home</a>
         </NavLink>
         <NavLink>
-          <a href="/tasks">Tasks</a>
+          <a href="/board">Board</a>
         </NavLink>
         {user.id && (
           <UserContainer>
@@ -67,12 +68,14 @@ const LogoImage = styled.img`
 
 const NavbarContainer = styled.nav`
   display: flex;
-  position: sticky;
+  position: fixed;
   width: 100%;
+  z-index: 1000;
   justify-content: space-between;
   align-items: center;
   padding: 8px 32px;
   background-color: #191c1fc6;
+  backdrop-filter: blur(10px);
   color: #fff;
 `;
 

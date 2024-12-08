@@ -1,30 +1,59 @@
 import { useDraggable } from "@dnd-kit/core";
 import { Task } from "./types";
 import styled from "styled-components";
+import { useState } from "react";
+import TaskDetailsModal from "./TaskDetailsModal";
 
 const TaskCard = ({ task }: TaskCardProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef } = useDraggable({
     id: task.id,
   });
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const style = transform
-    ? {
-        transform: `translate(${transform.x}px, ${transform.y}px)`,
-      }
-    : undefined;
+  const handleOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
   return (
-    <Card ref={setNodeRef} {...listeners} {...attributes} style={style}>
-      <h3 className="font-medium text-neutral-100">{task.title}</h3>
-      <p className="mt-2 text-sm text-neutral-400">{task.description}</p>
+    <Card ref={setNodeRef}>
+      <CardHandle {...listeners} {...attributes} />
+      <CardContent onClick={handleOpen}>
+        <div>{task.title}</div>
+      </CardContent>
+      <TaskDetailsModal
+        open={modalOpen}
+        handleClose={handleClose}
+        task={task}
+      />
     </Card>
   );
 };
 
-const Card = styled.div`
+const Asignee = styled.div`
+  font-size: 0.875rem;
+  color: #adb5bd;
+`;
+
+const CardContent = styled.div`
+  padding: 16px;
+  width: 100%;
+  cursor: pointer;
+`;
+
+const CardHandle = styled.div`
   cursor: grab;
-  border-radius: 0.5rem;
-  padding: 1rem;
+  width: 100%;
+  height: 16px;
+  background-color: #212529;
+  border-radius: 4px 4px 0 0;
+`;
+
+const Card = styled.div`
+  border-radius: 4px 4px 8px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   background-color: #6c757d;
 
