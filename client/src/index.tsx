@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import GlobalStyles from "./globalStyles";
-import { RouterProvider } from "react-router-dom";
-import router from "./Router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import { store } from "./Redux/store";
 import Navbar from "./components/Navbar";
+import { BrowserRouter } from "react-router";
+import Router from "./Router";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,11 +15,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
     <React.StrictMode>
-      <Provider store={store}>
-        <GlobalStyles />
-        <Navbar />
-        <RouterProvider router={router} />
-      </Provider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <GlobalStyles />
+          <Navbar />
+          <Router />
+        </Provider>
+      </BrowserRouter>
     </React.StrictMode>
   </GoogleOAuthProvider>
 );

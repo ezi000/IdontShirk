@@ -7,8 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../tasksSlice";
 import { Task } from "../types";
 import axios from "axios";
-import selectUser from "../../Authentication/selectUser";
 import { Guid } from "guid-typescript";
+import selectUser from "../../Authentication/selectUser";
+import { z } from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const AddTaskModal = () => {
   const [open, setOpen] = useState(false);
@@ -17,14 +19,27 @@ const AddTaskModal = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
+  const validationSchema = z.object({
+    title: z.string().nonempty("Title is required"),
+    description: z.string().nonempty("Description is required"),
+    timeGoal: z
+      .number()
+      .min(1, "Time Goal must be at least 1 minute")
+      .nonnegative("Time Goal must be a positive number"),
+  });
+
   const formik = useFormik<Task>({
     initialValues: {
       id: "",
       title: "",
       description: "",
       status: "TODO",
-      assignee: "NONE",
+      userId: "",
+      timeSpent: 0,
+      timeGoal: 0,
+      completed: false,
     },
+    validationSchema: toFormikValidationSchema(validationSchema),
     onSubmit: async (task) => {
       const taskId = Guid.raw();
       dispatch(
@@ -33,7 +48,10 @@ const AddTaskModal = () => {
           title: task.title,
           description: task.description,
           status: task.status,
-          assignee: task.assignee,
+          userId: user.id,
+          timeSpent: 0,
+          timeGoal: task.timeGoal,
+          completed: false,
         })
       );
       const response = await axios.post("http://localhost:5050/task/add", {
@@ -41,9 +59,16 @@ const AddTaskModal = () => {
         title: task.title,
         description: task.description,
         status: task.status,
-        assignee: task.assignee,
+        completed: false,
+        userId: user.id,
+        timeSpent: 0,
+        timeGoal: task.timeGoal,
       });
-      response && handleClose();
+
+      if (response) {
+        handleClose();
+        formik.resetForm();
+      }
     },
   });
 
@@ -56,49 +81,63 @@ const AddTaskModal = () => {
         <Content>
           <h2>Add New Task</h2>
           <StyledForm onSubmit={formik.handleSubmit}>
-            <label>
+            <StyledLabel>
               Title:
-              <input
+              <StyledInput
                 type="text"
                 name="title"
                 onChange={formik.handleChange}
                 value={formik.values.title}
               />
-            </label>
-            <label>
+            </StyledLabel>
+            <StyledLabel>
               Description:
-              <input
+              <StyledInput
                 type="text"
                 name="description"
                 onChange={formik.handleChange}
                 value={formik.values.description}
               />
-            </label>
-            <label>
-              Status:
-              <input
-                type="text"
-                name="status"
+            </StyledLabel>
+            <StyledLabel>
+              Time Goal (minutes):
+              <StyledInput
+                type="number"
+                name="timeGoal"
                 onChange={formik.handleChange}
-                value={formik.values.status}
+                value={formik.values.timeGoal}
               />
-            </label>
-            <label>
-              Assignee:
-              <input
-                type="text"
-                name="assignee"
-                onChange={formik.handleChange}
-                value={formik.values.assignee}
-              />
-            </label>
-            <DefaultButton type="submit">Submit</DefaultButton>
+            </StyledLabel>
+            <SubmitButton type="submit">Submit</SubmitButton>
           </StyledForm>
         </Content>
       </MuiModal>
     </>
   );
 };
+
+const SubmitButton = styled(DefaultButton)`
+  && {
+    width: 100%;
+    margin-top: 16px;
+  }
+`;
+
+const StyledLabel = styled.label`
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  font-weight: bold;
+  align-items: center;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+`;
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -125,8 +164,7 @@ const Content = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  background-color: white;
-  border: 2px solid #000;
+  background-color: #495057;
   border-radius: 16px;
   box-shadow: 24px;
   padding: 16px;

@@ -23,6 +23,10 @@ const TaskCard = ({ task }: TaskCardProps) => {
       <CardHandle {...listeners} {...attributes} />
       <CardContent onClick={handleOpen}>
         <div>{task.title}</div>
+        <ProgressWrapper>
+          <StyledProgress value={task.timeSpent} max={task.timeGoal} />
+          {`${Math.round((task.timeSpent / task.timeGoal) * 100)}%`}
+        </ProgressWrapper>
       </CardContent>
       <TaskDetailsModal
         open={modalOpen}
@@ -33,14 +37,24 @@ const TaskCard = ({ task }: TaskCardProps) => {
   );
 };
 
-const Asignee = styled.div`
-  font-size: 0.875rem;
-  color: #adb5bd;
+const ProgressWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+`;
+
+const StyledProgress = styled.progress`
+  width: 100%;
 `;
 
 const CardContent = styled.div`
   padding: 16px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   cursor: pointer;
 `;
 

@@ -12,6 +12,7 @@ import TaskCard from "./TaskCard";
 import { useDispatch, useSelector } from "react-redux";
 import selectTasks from "./selectTasks";
 import { setTasks } from "./tasksSlice";
+import axios from "axios";
 
 const COLUMNS: ColumnType[] = [
   { id: "TODO", title: "To Do" },
@@ -37,6 +38,8 @@ const Kanban = () => {
     const taskId = active.id as string;
     const newStatus = over.id as Task["status"];
 
+    if (newStatus === "DONE") return;
+
     const newTasks = tasks.map((task) =>
       task.id === taskId
         ? {
@@ -46,7 +49,15 @@ const Kanban = () => {
         : task
     );
 
-    dispatch(setTasks(newTasks));
+    const task = tasks.find((task) => task.id === taskId);
+
+    if (task?.status !== newStatus) {
+      dispatch(setTasks(newTasks));
+      axios.put("http://localhost:5050/task/update", {
+        id: taskId,
+        status: newStatus,
+      });
+    }
   };
 
   const getTaskById = (id: string | number) => {

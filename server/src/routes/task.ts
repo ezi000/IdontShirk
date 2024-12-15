@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { ObjectId } from "mongodb";
 import db from "../db/connection";
 
 const router = express.Router();
@@ -15,14 +14,45 @@ router.get("/", async (_req: Request, res: Response) => {
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const results = await collection.findOne({
-    id: new ObjectId(req.params.id),
+  const results = await collection
+    .find({
+      userId: req.params.id,
+    })
+    .toArray();
+
+  if (!results) {
+    res.send("User has no tasks").status(404);
+    return;
+  }
+  res.send(results).status(200);
+});
+
+router.delete("/:id", async (req: Request, res: Response) => {
+  const results = await collection.deleteOne({
+    id: req.params.id,
   });
+
   if (!results) {
     res.send("Record not found").status(404);
     return;
   }
+
   res.send(results).status(200);
+});
+
+router.put("/update", async (req: Request, res: Response) => {
+  try {
+    const taskFound = await collection.findOne({ id: req.body.id });
+    if (taskFound) {
+      const results = await collection.updateOne(
+        { id: req.body.id },
+        { $set: req.body }
+      );
+      res.send(results).status(201);
+    }
+  } catch (error) {
+    res.send("Error updating record").status(500);
+  }
 });
 
 router.post("/add", async (req: Request<Task>, res: Response) => {
@@ -32,7 +62,10 @@ router.post("/add", async (req: Request<Task>, res: Response) => {
       status: req.body.status,
       title: req.body.title,
       description: req.body.description,
-      assignee: req.body.assignee,
+      userId: req.body.userId,
+      timeSpent: req.body.timeSpent,
+      timeGoal: req.body.timeGoal,
+      completed: req.body.completed,
     };
     const taskFound = await collection.findOne({ id: newTask.id });
     if (!taskFound) {
@@ -51,7 +84,10 @@ type Task = {
   status: TaskStatus;
   title: string;
   description: string;
-  assignee: string;
+  userId: string;
+  timeSpent: number;
+  timeGoal: number;
+  completed: boolean;
 };
 
 export default router;

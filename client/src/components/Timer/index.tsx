@@ -1,12 +1,30 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import DefaultButton from "../DefaultButton";
+import { useDispatch, useSelector } from "react-redux";
+import selectTasks from "../Kanban/selectTasks";
+import { updateTask } from "../Kanban/tasksSlice";
+import axios from "axios";
 
-const Timer = () => {
+const Timer = ({ selectedTaskId }: { selectedTaskId: string }) => {
+  const tasks = useSelector(selectTasks);
   const [isRunning, setIsRunning] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const selectedTask = tasks.find((task) => task.id === selectedTaskId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsRunning(false);
+    if (selectedTask) {
+      selectedTask.timeSpent / 60 > 1
+        ? setHours(selectedTask.timeSpent / 60)
+        : setHours(0);
+      setMinutes(selectedTask.timeSpent % 60);
+      setSeconds(0);
+    }
+  }, [selectedTask?.id]);
 
   const isTimerAtZero = hours === 0 && minutes === 0 && seconds === 0;
 
@@ -24,6 +42,18 @@ const Timer = () => {
                 setHours((prevHours) => prevHours + 1);
                 return 0;
               } else {
+                if (selectedTask) {
+                  dispatch(
+                    updateTask({
+                      ...selectedTask,
+                      timeSpent: prevMinutes + 1,
+                    })
+                  );
+                  axios.put("http://localhost:5050/task/update", {
+                    id: selectedTask.id,
+                    timeSpent: prevMinutes + 1,
+                  });
+                }
                 return prevMinutes + 1;
               }
             });

@@ -5,7 +5,10 @@ export type Task = {
   status: TaskStatus;
   title: string;
   description: string;
-  assignee: string;
+  userId: string;
+  timeSpent: number;
+  timeGoal: number;
+  completed: boolean;
 };
 
 export type Column = {

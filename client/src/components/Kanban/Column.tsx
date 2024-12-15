@@ -1,9 +1,7 @@
-import { DragOverlay, useDroppable } from "@dnd-kit/core";
+import { useDroppable } from "@dnd-kit/core";
 import { Column as ColumnType, Task } from "./types";
 import TaskCard from "./TaskCard";
 import styled, { css } from "styled-components";
-import TaskDetailsModal from "./TaskDetailsModal";
-import { useState } from "react";
 
 const Column = ({ column, tasks }: ColumnProps) => {
   const { setNodeRef, active } = useDroppable({
@@ -18,7 +16,7 @@ const Column = ({ column, tasks }: ColumnProps) => {
           return <TaskCard key={task.id} task={task} />;
         })}
       </StyledTasks>
-      <DroppableArea active={active ? true : false} />
+      {column.id !== "DONE" && <DroppableArea active={active ? true : false} />}
     </StyledColumn>
   );
 };

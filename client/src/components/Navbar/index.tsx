@@ -4,6 +4,7 @@ import useGetLoggedUser from "../Authentication/useGetLoggedUser";
 import { useSelector } from "react-redux";
 import selectUser from "../Authentication/selectUser";
 import LogoImageSrc from "../icons/Logo.png";
+import { NavLink } from "react-router";
 
 const Navbar = () => {
   useGetLoggedUser();
@@ -16,15 +17,11 @@ const Navbar = () => {
         IdontShirk
       </Logo>
       <NavLinks>
-        <NavLink>
-          <a href="/">Home</a>
-        </NavLink>
-        <NavLink>
-          <a href="/board">Board</a>
-        </NavLink>
+        <StyledNavLink to="/">Home</StyledNavLink>
+        <StyledNavLink to="/board">Board</StyledNavLink>
         {user.id && (
           <UserContainer>
-            <UserPicture src={user.picture} />
+            <UserPicture src={user.picture} alt="user picture" />
             <UserName>{user.name}</UserName>
           </UserContainer>
         )}
@@ -79,22 +76,15 @@ const NavbarContainer = styled.nav`
   color: #fff;
 `;
 
-const NavLinks = styled.ul`
-  list-style: none;
+const NavLinks = styled.div`
   align-items: center;
   margin: 0;
   display: flex;
-  gap: 1rem;
+  gap: 16px;
 `;
 
-const NavLink = styled.li`
-  a {
-    color: #fff;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+const StyledNavLink = styled(NavLink)`
+  color: #fff;
 `;
 
 export default Navbar;

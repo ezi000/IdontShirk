@@ -1,42 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Task, TaskStatus } from "./types";
+import { Task } from "./types";
 
 export type TasksState = {
   tasks: Task[];
 };
 
 const initialState: TasksState = {
-  tasks: [
-    {
-      id: "1",
-      title: "Research Project",
-      description: "Gather requirements and create initial documentation",
-      status: "TODO",
-      assignee: "NONE",
-    },
-    {
-      id: "2",
-      title: "Design System",
-      description: "Create component library and design tokens",
-      status: "TODO",
-      assignee: "NONE",
-    },
-    {
-      id: "3",
-      title: "API Integration",
-      description: "Implement REST API endpoints",
-      status: "IN_PROGRESS",
-      assignee: "NONE",
-    },
-    {
-      id: "4",
-      title: "Testing",
-      description: "Write unit tests for core functionality",
-      status: "DONE",
-      assignee: "NONE",
-    },
-  ],
+  tasks: [],
 };
 
 export const tasksSlice = createSlice({

@@ -1,18 +1,12 @@
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import { Route, Routes } from "react-router";
 import Home from "../containers/Home";
 import KanbanPage from "../containers/KanbanPage";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<Home />} />
-      <Route path="/board" element={<KanbanPage />} />
-    </>
-  )
+const Router = () => (
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/board" element={<KanbanPage />} />
+  </Routes>
 );
 
-export default router;
+export default Router;
