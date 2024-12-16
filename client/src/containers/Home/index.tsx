@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import selectUser from "../../components/Authentication/selectUser";
 import UserNotLogged from "../../components/UserNotLogged";
+import DoneTasks from "../../components/DoneTasks";
 
 const Home = () => {
   useGetTasks();
@@ -17,26 +18,34 @@ const Home = () => {
   }
 
   // TODO:
-  // - Better progress bar ?
-  // - Confetti and auto change task progress status to done when time goal is reached
+  // - EDIT TASK
 
   return (
     <BodyWrapper>
       <Timer selectedTaskId={selectedTaskId} />
-      <StartedTasks
-        selectedTaskId={selectedTaskId}
-        setSelectedTaskId={setSelectedTaskId}
-      />
+      <TasksWrapper>
+        <StartedTasks
+          selectedTaskId={selectedTaskId}
+          setSelectedTaskId={setSelectedTaskId}
+        />
+        <DoneTasks />
+      </TasksWrapper>
     </BodyWrapper>
   );
 };
 
-export const BodyWrapper = styled.div`
+const TasksWrapper = styled.div`
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+`;
+
+const BodyWrapper = styled.div`
   display: flex;
   margin-top: 64px;
+  gap: 80px;
   flex-direction: column;
-  align-items: center;
-  gap: 64px;
+  overflow-x: hidden;
 `;
 
 export default Home;

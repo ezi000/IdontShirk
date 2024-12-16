@@ -23,14 +23,19 @@ const StartedTasks = ({
     <StartedTasksWrapper>
       Tasks in progess:
       <InnerTasksWrapper>
+        {startedTasks.length === 0 && (
+          <StyledWarning>
+            You have no tasks in progress, select some from the board
+          </StyledWarning>
+        )}
         {startedTasks.map((task) => (
           <Task key={task.id}>
             <TaskInfo>
               <div>{task.title}</div>
               <Progress>
-                Progress: {task.timeSpent}/{task.timeGoal}
+                Progress: {task.timeSpent}/{task.timeGoal} min
               </Progress>
-              <progress
+              <StyledProgress
                 value={task.timeSpent}
                 max={task.timeGoal}
                 style={{ width: "100%" }}
@@ -49,10 +54,37 @@ const StartedTasks = ({
   );
 };
 
+const StyledProgress = styled.progress`
+  width: 100%;
+  appearance: none;
+  -webkit-appearence: none;
+
+  &::-webkit-progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+  }
+
+  &::-webkit-progress-value {
+    background-color: #76c7c0;
+    border-radius: 10px 0 0 10px;
+  }
+
+  &::-moz-progress-bar {
+    background-color: #76c7c0;
+    border-radius: 10px;
+  }
+`;
+
+const StyledWarning = styled.div`
+  color: #f5cb5c;
+  max-width: 300px;
+`;
+
 const Progress = styled.div`
   width: 100%;
   font-size: 12px;
   color: #6c757d;
+  flex-shrink: 0;
 `;
 
 const TaskInfo = styled.div`

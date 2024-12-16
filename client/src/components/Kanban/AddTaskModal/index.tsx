@@ -11,6 +11,7 @@ import { Guid } from "guid-typescript";
 import selectUser from "../../Authentication/selectUser";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import TextField from "@mui/material/TextField";
 
 const AddTaskModal = () => {
   const [open, setOpen] = useState(false);
@@ -82,27 +83,31 @@ const AddTaskModal = () => {
           <h2>Add New Task</h2>
           <StyledForm onSubmit={formik.handleSubmit}>
             <StyledLabel>
-              Title:
-              <StyledInput
+              Title
+              <StyledTextField
                 type="text"
                 name="title"
+                size="small"
                 onChange={formik.handleChange}
                 value={formik.values.title}
               />
             </StyledLabel>
             <StyledLabel>
-              Description:
-              <StyledInput
-                type="text"
-                name="description"
-                onChange={formik.handleChange}
+              Description
+              <StyledTextField
+                multiline
+                size="small"
                 value={formik.values.description}
+                onChange={formik.handleChange}
+                name="description"
+                rows={4}
               />
             </StyledLabel>
             <StyledLabel>
-              Time Goal (minutes):
-              <StyledInput
+              Time Goal (minutes)
+              <StyledTextField
                 type="number"
+                size="small"
                 name="timeGoal"
                 onChange={formik.handleChange}
                 value={formik.values.timeGoal}
@@ -125,17 +130,19 @@ const SubmitButton = styled(DefaultButton)`
 
 const StyledLabel = styled.label`
   display: flex;
-  gap: 4px;
+  gap: 16px;
   width: 100%;
   font-weight: bold;
+  justify-content: space-between;
   align-items: center;
 `;
 
-const StyledInput = styled.input`
+const StyledTextField = styled(TextField)`
   width: 100%;
   padding: 8px;
   margin: 8px 0;
   border-radius: 8px;
+  max-width: 220px;
   background-color: #f5f5f5;
 `;
 

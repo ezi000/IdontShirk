@@ -8,6 +8,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: task.id,
   });
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleOpen = () => {
@@ -20,7 +21,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
 
   return (
     <Card ref={setNodeRef}>
-      <CardHandle {...listeners} {...attributes} />
+      {task.status !== "DONE" && <CardHandle {...listeners} {...attributes} />}
       <CardContent onClick={handleOpen}>
         <div>{task.title}</div>
         <ProgressWrapper>
@@ -47,6 +48,23 @@ const ProgressWrapper = styled.div`
 
 const StyledProgress = styled.progress`
   width: 100%;
+  appearance: none;
+  -webkit-appearence: none;
+
+  &::-webkit-progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+  }
+
+  &::-webkit-progress-value {
+    background-color: #76c7c0;
+    border-radius: 10px 0 0 10px;
+  }
+
+  &::-moz-progress-bar {
+    background-color: #76c7c0;
+    border-radius: 10px;
+  }
 `;
 
 const CardContent = styled.div`

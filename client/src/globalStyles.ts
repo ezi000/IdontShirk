@@ -28,12 +28,9 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
     min-width: 100%;
     min-height: 100%;
-    flex-direction: column;
 
     & > div:first-of-type {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       min-width: 100%;
     }
   }

@@ -10,7 +10,9 @@ const Column = ({ column, tasks }: ColumnProps) => {
 
   return (
     <StyledColumn ref={setNodeRef}>
-      <StyledH2>{column.title}</StyledH2>
+      <StyledH2>
+        {column.id === "DONE" ? `${column.title} 🥳` : column.title}
+      </StyledH2>
       <StyledTasks>
         {tasks.map((task) => {
           return <TaskCard key={task.id} task={task} />;

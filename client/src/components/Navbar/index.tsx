@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <NavbarContainer>
-      <Logo href="/">
+      <Logo to="/">
         <LogoImage src={LogoImageSrc} alt="logo" />
         IdontShirk
       </Logo>
@@ -21,7 +21,7 @@ const Navbar = () => {
         <StyledNavLink to="/board">Board</StyledNavLink>
         {user.id && (
           <UserContainer>
-            <UserPicture src={user.picture} alt="user picture" />
+            <UserPicture src={user.picture} loading="lazy" alt="user picture" />
             <UserName>{user.name}</UserName>
           </UserContainer>
         )}
@@ -50,7 +50,7 @@ const UserName = styled.div`
   color: #fff;
 `;
 
-const Logo = styled.a`
+const Logo = styled(NavLink)`
   display: flex;
   align-items: center;
   gap: 8px;

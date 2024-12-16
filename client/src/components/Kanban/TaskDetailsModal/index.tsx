@@ -5,7 +5,6 @@ import DefaultButton from "../../DefaultButton";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { removeTask } from "../tasksSlice";
-import { get } from "http";
 import getStatusColor from "../getStatusColor";
 
 const TaskDetailsModal = ({
@@ -45,7 +44,7 @@ const TaskDetailsModal = ({
               {`${Math.round((task.timeSpent / task.timeGoal) * 100)}%`}
             </ProgressWrapper>
           </Details>
-          <DeleteButton bgColor="#c1121f" onClick={handleTaskDelete}>
+          <DeleteButton bgColor="#bc4749" onClick={handleTaskDelete}>
             Delete
           </DeleteButton>
         </Content>
@@ -55,11 +54,18 @@ const TaskDetailsModal = ({
 };
 
 const Description = styled.div`
-  width: 100%;
+  display: flex;
+  height: 100px;
   padding: 16px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 8px;
   background-color: #748cab;
   border-radius: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 `;
 
 const ProgressWrapper = styled.div`
@@ -72,6 +78,23 @@ const ProgressWrapper = styled.div`
 
 const StyledProgress = styled.progress`
   width: 100%;
+  appearance: none;
+  -webkit-appearence: none;
+
+  &::-webkit-progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+  }
+
+  &::-webkit-progress-value {
+    background-color: #76c7c0;
+    border-radius: 10px 0 0 10px;
+  }
+
+  &::-moz-progress-bar {
+    background-color: #76c7c0;
+    border-radius: 10px;
+  }
 `;
 
 const Status = styled.div<{ $bgColor?: string }>`
