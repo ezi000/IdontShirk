@@ -40,7 +40,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
   res.send(results).status(200);
 });
 
-router.put("/update", async (req: Request, res: Response) => {
+router.put("/edit", async (req: Request, res: Response) => {
   try {
     const taskFound = await collection.findOne({ id: req.body.id });
     if (taskFound) {

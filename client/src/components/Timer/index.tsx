@@ -3,7 +3,7 @@ import styled from "styled-components";
 import DefaultButton from "../DefaultButton";
 import { useDispatch, useSelector } from "react-redux";
 import selectTasks from "../Kanban/selectTasks";
-import { updateTask } from "../Kanban/tasksSlice";
+import { editTask } from "../Kanban/tasksSlice";
 import axios from "axios";
 import Confetti from "react-confetti";
 
@@ -34,7 +34,7 @@ const Timer = ({ selectedTaskId }: { selectedTaskId: string }) => {
       if (selectedTask.timeSpent === selectedTask.timeGoal) {
         setIsRunning(false);
         dispatch(
-          updateTask({
+          editTask({
             ...selectedTask,
             completed: true,
             status: "DONE",
@@ -72,7 +72,7 @@ const Timer = ({ selectedTaskId }: { selectedTaskId: string }) => {
               } else {
                 if (selectedTask) {
                   dispatch(
-                    updateTask({
+                    editTask({
                       ...selectedTask,
                       timeSpent: prevMinutes + 1,
                     })

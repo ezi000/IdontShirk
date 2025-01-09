@@ -4,8 +4,10 @@ import { Task } from "../types";
 import DefaultButton from "../../DefaultButton";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { removeTask } from "../tasksSlice";
+import { editTask, removeTask } from "../tasksSlice";
 import getStatusColor from "../getStatusColor";
+import { Input, TextField } from "@mui/material";
+import { useState } from "react";
 
 const TaskDetailsModal = ({
   handleClose,
@@ -13,10 +15,29 @@ const TaskDetailsModal = ({
   task,
 }: TaskDetailsModalProps) => {
   const dispatch = useDispatch();
+  const [taskTitle, setTaskTitle] = useState(task.title);
+  const [taskDescription, setTaskDescription] = useState(task.description);
 
   if (!task) {
     return;
   }
+
+  const updateTask = async () => {
+    if (task.status === "DONE") {
+      handleClose();
+      return;
+    }
+
+    dispatch(
+      editTask({ ...task, title: taskTitle, description: taskDescription })
+    );
+    await axios.put("http://localhost:5050/task/edit", {
+      id: task.id,
+      title: taskTitle,
+      description: taskDescription,
+    });
+    handleClose();
+  };
 
   const handleTaskDelete = async () => {
     dispatch(removeTask(task.id));
@@ -26,11 +47,23 @@ const TaskDetailsModal = ({
 
   return (
     <>
-      <MuiModal open={open} onClose={handleClose}>
+      <MuiModal open={open} onClose={updateTask}>
         <Content>
           <Details>
-            <h2>{task.title}</h2>
-            <Description>{task.description}</Description>
+            <StyledInput
+              value={taskTitle}
+              readOnly={task.status === "DONE"}
+              onChange={(e) => setTaskTitle(e.target.value)}
+            />
+            <StyledTextField
+              id="filled-multiline-static"
+              multiline
+              rows={4}
+              variant="outlined"
+              value={taskDescription}
+              disabled={task.status === "DONE"}
+              onChange={(e) => setTaskDescription(e.target.value)}
+            />
             <Status $bgColor={getStatusColor(task.status)}>
               Status:{" "}
               <span>
@@ -53,19 +86,23 @@ const TaskDetailsModal = ({
   );
 };
 
-const Description = styled.div`
-  display: flex;
-  height: 100px;
-  padding: 16px;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8px;
-  background-color: #748cab;
-  border-radius: 8px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+const StyledTextField = styled(TextField)`
+  && {
+    margin-bottom: 8px;
+    background-color: #aab5c4;
+    border-radius: 8px;
+
+    textarea {
+      font-family: "Geist Mono", monospace;
+    }
+  }
+`;
+
+const StyledInput = styled(Input)`
+  && {
+    font-size: 24px;
+    font-family: "Geist Mono", monospace;
+  }
 `;
 
 const ProgressWrapper = styled.div`

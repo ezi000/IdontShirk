@@ -1,18 +1,12 @@
-import { useState } from "react";
 import type { Task, Column as ColumnType } from "./types";
-import {
-  DndContext,
-  DragEndEvent,
-  DragOverlay,
-  DragStartEvent,
-} from "@dnd-kit/core";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
 import styled from "styled-components";
 import Column from "./Column";
 import TaskCard from "./TaskCard";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import selectTasks from "./selectTasks";
-import { setTasks } from "./tasksSlice";
-import axios from "axios";
+
+import useDragLogic from "./useDragLogic";
 
 const COLUMNS: ColumnType[] = [
   { id: "TODO", title: "To Do" },
@@ -22,43 +16,7 @@ const COLUMNS: ColumnType[] = [
 
 const Kanban = () => {
   const tasks = useSelector(selectTasks);
-  const dispatch = useDispatch();
-  const [activeId, setActiveId] = useState<string | number | null>(null);
-
-  const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id);
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    setActiveId(null);
-    const { active, over } = event;
-
-    if (!over) return;
-
-    const taskId = active.id as string;
-    const newStatus = over.id as Task["status"];
-
-    if (newStatus === "DONE") return;
-
-    const newTasks = tasks.map((task) =>
-      task.id === taskId
-        ? {
-            ...task,
-            status: newStatus,
-          }
-        : task
-    );
-
-    const task = tasks.find((task) => task.id === taskId);
-
-    if (task?.status !== newStatus) {
-      dispatch(setTasks(newTasks));
-      axios.put("http://localhost:5050/task/update", {
-        id: taskId,
-        status: newStatus,
-      });
-    }
-  };
+  const { handleDragStart, handleDragEnd, activeId } = useDragLogic(tasks);
 
   const getTaskById = (id: string | number) => {
     return tasks.find((task) => task.id === id);
